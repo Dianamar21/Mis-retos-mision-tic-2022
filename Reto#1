@@ -1,0 +1,30 @@
+#Crear una variable tipo diccionario
+producto = { 
+"proCodigo" : " ",
+"proNombre" : "  ",
+"proCantidad" : 0,
+"proCosto" : 0
+}
+
+producto['proCodigo'] =  input() 
+producto['proNombre'] = input()
+producto['proCantidad'] = int(input())
+producto['proCosto'] = int(input())
+def ingresoProducto (dict):
+
+#Entradas estáticas:
+    proUtilidad = 19
+    proMinstock = 10
+    proMaxstock = 500 
+
+    if dict['proCantidad'] >= proMinstock and dict['proCantidad'] <= proMaxstock:
+        proPrecio = dict['proCosto'] * (proUtilidad + 100)/100
+        proTotprecio = proPrecio * dict['proCantidad']
+        mensaje = "El producto " + str(dict['proNombre']) + "  código " + str(dict['proCodigo']) + " tiene un precio " + str(proPrecio) +  " y su precio total es " + str(proTotprecio) + " ha sido ingresado correctamente"
+    elif dict['proCantidad'] > proMaxstock: 
+         mensaje = "El Producto " + str(dict['proNombre']) +  " condigo " + str(dict['proCodigo']) + " se encuentra fuera del rango max stock"
+    else:
+        mensaje = "El Producto " + str(dict['proNombre']) +  " condigo " + str(dict['proCodigo']) + " se encuentra fuera del rango min stock"
+
+    return mensaje 
+#print(ingresoProducto(producto))
