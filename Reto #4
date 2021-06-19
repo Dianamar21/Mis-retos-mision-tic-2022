@@ -1,0 +1,36 @@
+def inforServicio(lectura: dict, tarifa: dict) -> tuple:
+    segundo_elemento = []
+    tercer_elemento = []
+    estratos = {
+        1: {'tipo': 'subsidio', 'porcentaje': 0.4},
+        2: {'tipo': 'subsidio', 'porcentaje': 0.15},
+        3: {'tipo': 'subsidio', 'porcentaje': 0.1},
+        4: {'tipo': 'contribucion', 'porcentaje': 0.5},
+        5: {'tipo': 'contribucion', 'porcentaje': 0.5},
+        6: {'tipo': 'contribucion', 'porcentaje': 0.5}
+    }
+    cargo_basico = tarifa['cargo_basico']
+    consumo = tarifa['consumo']
+    sumaTotal = 0
+    resultados = {}
+    for key_lectura in lectura:
+            lectura_ = lectura[key_lectura]
+            estado = lectura_['estado']
+            if estado == 'activo':
+                resultados[key_lectura] = 0
+                estrato = estratos[lectura_['estrato']]
+                for item_lectura_ in lectura_['toma_lectura']:
+                    diferencia_lectura = item_lectura_[
+                        'lec_actual'] - item_lectura_['lec_anterior']
+                    m = 1 + \
+                        ((-1 if estrato['tipo'] == 'subsidio' else 1)
+                        * estrato['porcentaje'])
+                    x = m * (cargo_basico + consumo * diferencia_lectura)
+                    resultados[key_lectura] += x
+                    elemento = segundo_elemento if diferencia_lectura <= 15 else tercer_elemento
+                    elemento.append(diferencia_lectura)
+                    sumaTotal += x
+    primer_elemento = list(map(lambda k: (k, round(resultados[k], 2)), resultados.keys()))
+    if sumaTotal <= 0:
+        return "Sin lecturas"
+    return (primer_elemento, segundo_elemento, tercer_elemento, round(sumaTotal, 2))
